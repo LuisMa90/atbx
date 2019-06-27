@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Proyectos{% endblock %}
+{% block content %}
+
+
+<main role="main">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto mb-5">
+        <div>
+        <h2>Proyectos activos de ases </h2> 
+        <hr>
+        
+        <p>Deseas ingresar un nuevo proyecto <a class="btn btn-primary" href="{% url 'proyecto:proyecto_create' %}">Crear nuevo Proyecto</a></p>
+        <table id="promovente" class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Nombre del proyecto </th>
+            <th scope="col">Promovente</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Tipo de proyecto</th>
+            <th scope="col">Autorización </th>
+            <th scope="col">Estudios o servicio</th>
+            <th scope="col">Responsable</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        {%if object_list%}
+          {%for registro in object_list %}
+            <tr>
+              <th scope="row">{{registro.nombre}}</th>
+              <td>{{registro.promoventes}}</td>
+              <td>{{registro.cliente}}</td>
+              <td>{{registro.tipo_de_proyecto}}</td>
+              <td>{{registro.auto}}</td> 
+              {%for servicios in registro.estudios.all%}
+              <td>{{servicios}}</td> 
+              {%endfor%}
+              <td>{{registro.responsable}}</td>           
+              <td>
+                <a class="btn btn-outline-success btn-sm btn-small" href="{% url 'proyecto:proyectos_update' registro.id %}">Editar</a>
+                <a class="btn btn-outline-danger btn-sm" href="{% url 'proyecto:proyectos_delete'  registro.id %}">Eliminar</a>
+              </td>
+              
+              
+            </tr>
+          {%endfor%}
+        {%else%}
+          <div class="alert alert-warning" role="alert">
+              Aun no se cuentan con registros en esta tabla
+          </div>
+        {%endif%}
+        </tbody>
+      </table>
+                  
+                  
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+  $(document).ready(function() {
+    $('#promovente').DataTable();
+} );
+</script>
+{% endblock %}

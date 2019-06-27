@@ -1,0 +1,230 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Mapa{% endblock %}
+{% block content %}
+<!--{% include 'maps/includes/arc.html'%}-->
+<link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 10;
+      margin: 10;
+      height: 100%;
+      width: 100%;
+    }
+    
+    #topbar {
+      background: #fff;
+      padding: 10px;
+    }
+
+    .action-button {
+      font-size: 16px;
+      background-color: transparent;
+      border: 1px solid #D3D3D3;
+      color: #6e6e6e;
+      height: 32px;
+      width: 32px;
+      text-align: center;
+      box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+    }
+
+    .action-button:hover,
+    .action-button:focus {
+      background: #0079c1;
+      color: #e4e4e4;
+    }
+
+    .active {
+      background: #0079c1;
+      color: #e4e4e4;
+    }
+    
+  </style>
+
+  <script src="https://js.arcgis.com/4.10/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/widgets/Locate",
+      "esri/layers/GraphicsLayer",
+      "esri/widgets/Sketch",
+      "dojo/domReady!"
+    ], function(
+      Map,
+      MapView, 
+      Locate, 
+      GraphicsLayer, 
+      Sketch
+    ) {
+      const layer = new GraphicsLayer();
+
+      const map = new Map({
+        basemap : "topo-vector",
+        layers :[layer]
+      });
+      
+      var view = new MapView({ //En esta variable se van a poner todas las carcateristicas de la vista
+        container: "viewDiv",
+        map : map,
+        
+        center :[-102,23],
+        zoom :5,
+        
+      });
+      
+     // view.when(function() {
+
+        const sketch = new Sketch({
+          layer: layer,
+          view: view
+        });
+
+        var ubicacion = new Locate({
+        view : view,
+        useHeadingEnabled: false,
+        goToOverride: function(view, options) {
+          options.target.scale = 1500;
+        return view.goTo(options.target);
+          }
+        });
+
+        view.ui.add(sketch, "top-right");
+        view.ui.add(ubicacion, "top-left");
+        //view.ui.add(topbar, "top-right");
+
+        view.on("click", function(event){
+        // event is the event handle returned after the event fires.
+          alert("la latitud del punto es "  + event.mapPoint['latitude']);
+          alert("la longitud del punto es " +event.mapPoint['longitude']);
+          
+        });
+        
+      });
+      /*document.getElementById("punto").addEventListener("click",function () {
+          setActiveWidget(null);
+          if (!this.classList.contains('active')){
+            setActiveWidget('point');
+            
+          }else{
+            setActiveButton(null);
+          }
+        });
+        document.getElementById("polilinea").addEventListener("click",function () {
+          setActiveWidget(null);
+          if (!this.classList.contains('active')){
+            setActiveWidget('poliline');
+            mapPoint['latitude'];
+            mapPoint['longitude'];
+          }else{
+            setActiveButton(null);
+          }
+        });
+        document.getElementById("poligono").addEventListener("click",function () {
+          setActiveWidget(null);
+          if (!this.classList.contains('active')){
+            setActiveWidget('polygon');
+            mapPoint['latitude'];
+            mapPoint['longitude'];
+          }else{
+            setActiveButton(null);
+          }
+        });
+        document.getElementById("rectangulo").addEventListener("click",function () {
+          setActiveWidget(null);
+          if (!this.classList.contains('active')){
+            setActiveWidget('rect');
+            mapPoint['latitude'];
+            mapPoint['longitude'];
+          }else{
+            setActiveButton(null);
+          }
+        });
+        document.getElementById("circulo").addEventListener("click",function () {
+          setActiveWidget(null);
+          if (!this.classList.contains('active')){
+            setActiveWidget('cir');
+            mapPoint['latitude'];
+            mapPoint['longitude'];
+          }else{
+            setActiveButton(null);
+          }
+        });
+
+
+      function setActiveWidget(type){
+        switch (type){
+          case "point":
+            setActiveWidget = new Sketch({
+              layer: layer,
+              view: view
+            });
+            view.ui.add(activeWidget,"top-right");
+            setActiveButton(document.getElementById('punto')); 
+            break;
+          case "poliline":
+            setActiveWidget = new Sketch({
+              layer: layer,
+              view: view
+            });
+            view.ui.add(activeWidget,"top-right");
+            setActiveButton(document.getElementById('polilinea')); 
+            break;
+          case "polygon":
+            setActiveWidget = new Sketch({
+              layer: layer,
+              view: view
+            });
+            view.ui.add(activeWidget,"top-right");
+            setActiveButton(document.getElementById('poligono')); 
+            break;
+          case "rect":
+            setActiveWidget = new Sketch({
+              layer: layer,
+              view: view
+            });
+            view.ui.add(activeWidget,"top-right");
+            setActiveButton(document.getElementById('rectangulo')); 
+            break;
+          case "cir":
+            setActiveWidget = new Sketch({
+              layer: layer,
+              view: view
+            });
+            view.ui.add(activeWidget,"top-right");
+            setActiveButton(document.getElementById('circulo')); 
+            break;  
+          case null:
+            if (activeWidget) {
+              view.ui.remove(activeWidget);
+              activeWidget.destroy();
+              activeWidget = null;
+            }
+            break;
+          }
+      }*/
+      
+  
+    
+   
+  </script>
+<div id="viewDiv" class="col-md-9 mx-auto mb-5"></div>
+<!--<div id ="topbar">
+  <button class="action-button esri-icon-map-pin" id="punto" type="button"
+      title="Dibuja un punto en el mapa"></button>
+    <button class="action-button esri-icon-polyline" id="polilinea" type="button"
+      title="Dibuja una polilinea"></button>
+    <button class="action-button esri-icon-polygon" id="poligono" type="button"
+      title="Dibuja una poligono"></button>
+    <button class="action-button esri-icon-checkbox-unchecked" id="rectangulo" type="button"
+      title="Dibuja un rectangulo"></button>
+    <button class="action-button esri-icon-radio-unchecked" id="circulo" type="button"
+      title="Dibuja una círculo"></button>    
+</div>-->
+
+{% endblock %}

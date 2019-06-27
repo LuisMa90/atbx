@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Proyectos|Tipo de servicios{% endblock %}
+{% block content %}
+
+
+<main role="main">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto mb-5">
+        <div>
+        <h2>Tipos de servicios a ofrecer </h2> 
+        <hr>
+        
+        <p>Deseas ingresar un nuevo Servicio <a class="btn btn-primary" href="{% url 'proyecto:ts_create' %}">Crear nuevo cliente</a></p>
+        <table id="promovente" class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Nombre del tipo de servicio </th>
+            <th scope="col">Descripcion del servicio</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        {%for registro in object_list %}
+          <tr>
+            <th scope="row">{{registro.nombre}}</th>
+            <td>{{registro.desc}}</td>
+            
+            <td>
+              <a class="btn btn-outline-success btn-sm btn-small" href="{% url 'proyecto:ts_update' registro.id %}">Editar</a>
+              <a class="btn btn-outline-danger btn-sm" href="{% url 'proyecto:ts_delete'  registro.id %}">Eliminar</a>
+            </td>
+            
+            
+          </tr>
+        {%endfor%}
+        </tbody>
+      </table>
+                  
+                  
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+  $(document).ready(function() {
+    $('#promovente').DataTable();
+} );
+</script>
+{% endblock %}

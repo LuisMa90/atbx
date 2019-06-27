@@ -1,0 +1,60 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Proyectos|Promoventes{% endblock %}
+{% block content %}
+
+
+<main role="main">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto mb-5">
+        <div>
+        <h2>Promoventes de proyectos </h2> 
+        <hr>
+        
+        <p>Deseas ingresar un nuevo promovente <a class="btn btn-primary" href="{% url 'proyecto:promovente_create' %}">Crear nuevo promovente</a></p>
+        <table id="promovente" class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">RFC</th>
+            <th scope="col">Representante Legal</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        {%if object_list%}
+        {%for registro in object_list %}
+          <tr>
+            <th scope="row">{{registro.promovente}}</th>
+            <td>{{registro.rfc}}</td>
+            <td>{{registro.representante}}</td>
+            <td>
+              <a class="btn btn-outline-success btn-sm btn-small" href="{% url 'proyecto:promovente_update' registro.id %}">Editar</a>
+              <a class="btn btn-outline-danger btn-sm" href="{% url 'proyecto:promovente_delete'  registro.id %}">Eliminar</a>
+            </td>
+            
+            
+          </tr>
+        {%endfor%}
+        {%else%}
+          <div class="alert alert-warning" role="alert">
+              Aun no se cuentan con registros en esta tabla
+          </div>
+        {%endif%}
+        </tbody>
+      </table>
+                  
+                  
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+  $(document).ready(function() {
+    $('#promovente').DataTable();
+} );
+</script>
+{% endblock %}
